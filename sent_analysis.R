@@ -1,3 +1,4 @@
+### sent_analysis.R file ###
 library(tm) # load R package tm: framework for text mining applications
 library(RTextTools) # load R package RTextTools: Automatic Text Classification via Supervised Learning
 library(rminer)  # load R package rminer: Application of Data Mining Methods
@@ -38,7 +39,7 @@ container <- create_container(DTM,twt$sentiment,trainSize=1:n_training, testSize
 svm_model <- train_model(container,"SVM") # train SVM model
 svm_results <- classify_model(container,svm_model) # predict test set using SVM model
 # evaluation metrics
-svm_eval=mmetric(as.factor(twt$sentiment[(n_training+1):total]),svm_results[,1],metric=c("ACC","ACCLASS","TPR","TNR","PRECISION","F1"))
+svm_eval=mmetric(as.factor(twt$sentiment[(n_training+1):total]),svm_results[,1],metric=c("ACC","TPR","PRECISION","F1"))
 print(mean(svm_eval[c("F11","F12")])) # macro-averaged F-score
 
 # application of Naive Bayes (NB) method
@@ -49,7 +50,7 @@ colnames(df)[ncol(df)]<-"sentiment"
 nb_model=fit(sentiment~.,df[1:n_training,],model="naivebayes",task="class") # train NB model
 nb_results<-predict(nb_model,df[(n_training+1):total,]) # predict test set using NB model
 # evaluation metrics
-nb_eval=mmetric(as.factor(twt$sentiment[(n_training+1):total]),nb_results,metric=c("ACC","ACCLASS","TPR","TNR","PRECISION","F1"))
+nb_eval=mmetric(as.factor(twt$sentiment[(n_training+1):total]),nb_results,metric=c("ACC","TPR","PRECISION","F1"))
 print(mean(nb_eval[c("F11","F12")])) # macro-averaged F-score
 
 ### unsupervised sentiment classification
@@ -92,12 +93,12 @@ total_FIN<-tcrossprod_simple_triplet_matrix(DTM_FIN, t(as.simple_triplet_matrix(
 total_GI[total_GI>0]<-"positive" # tweets with positive score are considered positive
 total_GI[total_GI<0]<-"negative" # tweets with negative score are considered negative
 # evaluation metrics
-GI_eval=mmetric(as.factor(twt$sentiment[(n_training+1):total]),as.factor(total_GI[(n_training+1):total]),metric=c("ACC","ACCLASS","TPR","TNR","PRECISION","F1"))
+GI_eval=mmetric(as.factor(twt$sentiment[(n_training+1):total]),as.factor(total_GI[(n_training+1):total]),metric=c("ACC","TPR","PRECISION","F1"))
 print(mean(GI_eval[c("F11","F12")]))
 total_FIN[total_FIN>0]<-"positive" # tweets with positive score are labeled positive
 total_FIN[total_FIN<0]<-"negative" # tweets with negative score are labeled negative
 # evaluation metrics
-FIN_eval=mmetric(as.factor(twt$sentiment[(n_training+1):total]),as.factor(total_FIN[(n_training+1):total]),metric=c("ACC","ACCLASS","TPR","TNR","PRECISION","F1"))
+FIN_eval=mmetric(as.factor(twt$sentiment[(n_training+1):total]),as.factor(total_FIN[(n_training+1):total]),metric=c("ACC","TPR","PRECISION","F1"))
 print(mean(FIN_eval[c("F11","F12")])) # macro-averaged F-score
 
 ### inclusion of emoticons and hashtags features in a SVM classifier
@@ -126,5 +127,5 @@ container <- create_container(DTM,twt$sentiment,trainSize=1:n_training, testSize
 svm_model <- train_model(container,"SVM")
 svm_results <- classify_model(container,svm_model)
 # evaluation metrics
-svm_eval=mmetric(as.factor(twt$sentiment[(n_training+1):total]),svm_results[,1],metric=c("ACC","ACCLASS","TPR","TNR","PRECISION","F1"))
+svm_eval=mmetric(as.factor(twt$sentiment[(n_training+1):total]),svm_results[,1],metric=c("ACC","TPR","PRECISION","F1"))
 print(mean(svm_eval[c("F11","F12")])) # macro-averaged F-score
