@@ -18,9 +18,9 @@ twt$text<-gsub("[$]?[[:digit:]]*[.]?[[:digit:]]+","num",twt$text) # substitute a
 twt$text<-gsub("[$][[:alpha:]]+","cshtg",twt$text) # substitute cashtags by the word "cshtg"
 
 # create a list containing the emoticons of each tweet
-m<-gregexpr("(^|[[:space:]]|[[:punct:]])(([<>]?[:;=][-o*']?([)]|[(]|[]]|[[]|[dDpP}]|[/:{|\\]))|(([)]|[]]|[(]|[[]|[dDpP}]|[/:{|\\])[-o*']?[:;=][<>]?))([[:punct:]]|$|[[:space:]])",twt$text)
+m<-gregexpr("(^|[[:space:]])(([<>]?[:;=][-o*']?([)]|[(]|[]]|[[]|[dDpP}]|[/:{|\\]))|(([)]|[]]|[(]|[[]|[dDpP}]|[/:{|\\])[-o*']?[:;=][<>]?))($|[[:space:]])",twt$text)
 l_emot<-regmatches(twt$text,m)
-twt$text<-gsub("(^|[[:space:]]|[[:punct:]])(([<>]?[:;=][-o*']?([)]|[(]|[]]|[[]|[dDpP}]|[/:{|\\]))|(([)]|[]]|[(]|[[]|[dDpP}]|[/:{|\\])[-o*']?[:;=][<>]?))([[:punct:]]|$|[[:space:]])","\\1 ",twt$text) # remove these emoticons from text
+twt$text<-gsub("(^|[[:space:]])(([<>]?[:;=][-o*']?([)]|[(]|[]]|[[]|[dDpP}]|[/:{|\\]))|(([)]|[]]|[(]|[[]|[dDpP}]|[/:{|\\])[-o*']?[:;=][<>]?))($|[[:space:]])","\\1 ",twt$text) # remove these emoticons from text
 # create a list containing the hashtags of each tweet
 m<-gregexpr("#\\w+",twt$text)
 l_hstg<-regmatches(twt$text,m)

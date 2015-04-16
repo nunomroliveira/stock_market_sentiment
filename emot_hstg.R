@@ -7,14 +7,14 @@ load("preproc.RData") # load preprocessing objects
 load("sent_analysis.RData") # load sentiment analysis objects
 
 # function that calculates emoticon score (number of positive emoticons - number of negative emoticons)
-scr_emot <- function (vec) {
+scr_emot <- function (vec, tab_emot) {
 	if (length(vec)>0) {
-		emot_pos<-length(vec[grepl("(^|[[:space:]]|[[:punct:]])(([<>]?[:;=8][-o*']?([)]|[]]|[dDpP}]))|(([)]|[]]|[dDpP}])[-o*']?[:;=8][<>]?))([[:punct:]]|$|[[:space:]])",vec)])
-		emot_neg<-length(vec[grepl("(^|[[:space:]]|[[:punct:]])(([<>]?[:;=8][-o*']?([(]|[[]|[/:{|\\]))|(([(]|[[]|[/:{|\\])[-o*']?[:;=8][<>]?))([[:punct:]]|$|[[:space:]])",vec)])
-		return(emot_pos-emot_neg)
+		vec<-gsub("[[:space:]]","",vec) # remove spaces
+		return(sum(tab_emot$sentiment[tab_emot$emoticon %in% vec]))
 		} else return (0)
 	}
-emot_score<-unlist(lapply(l_emot, scr_emot))
+t_emot<-read.csv("emoticons.csv",stringsAsFactors=FALSE) # read a CSV file containing emoticons and respective sentiment polarity
+emot_score<-unlist(lapply(l_emot, scr_emot, t_emot))
 DTM<-cbind(DTM,emot_score) # add the emoticon score to Document-Term matrix
 colnames(DTM)[ncol(DTM)]<-"emot_score"
 
